@@ -12,15 +12,23 @@
         <tr>
             <th>Description</th>
             <th>Amount</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tbody>
+        
         @foreach (var expense in Model)
         {
             <tr>
                 <td>@expense.Description</td>
                 <td>@expense.Amount.ToString("C")</td>
                 <td>@expense.Date.ToShortDateString()</td>
+                
+                <td>
+                    <form asp-action="Delete" asp-route-id="@expense.Id" method="post">
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
         </tbody>
