@@ -30,6 +30,16 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    public IActionResult Edit(Expense? expense)
+    {
+        if (expense == null)
+        {
+            return RedirectToAction(nameof(ViewExpenses));
+        }
+
+        return View(expense);
+    }
     
     public async Task<IActionResult> ViewExpenses()
     {
@@ -38,6 +48,17 @@ public class HomeController : Controller
         ViewBag.TotalExpense = expenses.Sum(e => e.Amount);
         return View(expenses);
     }
+
+    public async Task<IActionResult> HandleEdit(Expense? expense)
+    {
+        if (expense != null)
+        {
+            _context.Update(expense);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(ViewExpenses));
+    }
+    
 
     public async Task<IActionResult> HandleCreate(Expense? expense)
     {

@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Edit Expense";
+}
+
+@model Expense
+
+<div class="text-center">
+    <h1 class="display-4">Expense ID: @Model.Id</h1>
+    
+    <form asp-action="HandleEdit" method="post" class="mt-4">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control" placeholder="Enter description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Amount" class="form-label"></label>
+            <input asp-for="Amount" class="form-control" placeholder="Enter amount" type="number" step="0.01" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
