@@ -20,6 +20,7 @@
             <tr>
                 <td>@expense.Description</td>
                 <td>@expense.Amount.ToString("C")</td>
+                <td>@expense.Date.ToShortDateString()</td>
             </tr>
         }
         </tbody>
