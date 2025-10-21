@@ -31,8 +31,10 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Edit(Expense? expense)
+    public async Task<IActionResult> Edit(int id)
     {
+
+        var expense = await _context.Expenses.FindAsync(id);
         if (expense == null)
         {
             return RedirectToAction(nameof(ViewExpenses));
