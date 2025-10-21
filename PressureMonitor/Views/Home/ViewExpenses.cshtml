@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "View Expenses";
+}
+
+@model List<Expense> 
+
+<div class="text-center">
+    <h1 class="display-4">Expenses List</h1>
+
+    <table class="table table-striped mt-4">
+        <thead>
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var expense in Model)
+        {
+            <tr>
+                <td>@expense.Description</td>
+                <td>@expense.Amount.ToString("C")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
