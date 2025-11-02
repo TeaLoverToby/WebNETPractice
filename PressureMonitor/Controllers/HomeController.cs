@@ -31,6 +31,96 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> HandleLogin(User? user)
+    {
+        if (user != null && !string.IsNullOrEmpty(user.Username) && !string.IsNullOrEmpty(user.Password))
+        {
+            try
+            {
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == user.Username && u.Password == user.Password);
+                
+                if (existingUser != null)
+                {
+                    // Login successful - store user session
+                    HttpContext.Session.SetString("Username", existingUser.Username);
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                // Login failed
+                TempData["Error"] = "Invalid username or password";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during user login");
+                TempData["Error"] = "An error occurred during login. Please try again.";
+            }
+        }
+        else
+        {
+            TempData["Error"] = "Please provide both username and password.";
+        }
+        
+        return RedirectToAction(nameof(Login));
+    }
+
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> HandleRegister(User? user)
+    {
+        if (user != null && !string.IsNullOrEmpty(user.Username) && !string.IsNullOrEmpty(user.Password))
+        {
+            // Check if username already exists
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+            if (existingUser != null)
+            {
+                TempData["Error"] = "Username already exists";
+                return RedirectToAction(nameof(Register));
+            }
+
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                
+                // Auto-login after registration
+                HttpContext.Session.SetString("Username", user.Username);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Database error during user registration");
+                TempData["Error"] = "An error occurred while creating your account. Please try again.";
+                return RedirectToAction(nameof(Register));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during user registration");
+                TempData["Error"] = "An unexpected error occurred. Please try again.";
+                return RedirectToAction(nameof(Register));
+            }
+        }
+        
+        TempData["Error"] = "Please provide valid username and password.";
+        return RedirectToAction(nameof(Register));
+    }
+
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction(nameof(Login));
+    }
+
     public async Task<IActionResult> Edit(int id)
     {
 
