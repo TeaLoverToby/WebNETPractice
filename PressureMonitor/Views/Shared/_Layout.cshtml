@@ -33,6 +33,26 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ViewExpenses">View Expenses</a>
                     </li>
                 </ul>
+                <ul class="navbar-nav">
+                    @if (Context.Session.GetString("Username") != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link text-dark">Welcome, @Context.Session.GetString("Username")!</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
     </nav>
